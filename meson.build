@@ -3,7 +3,7 @@ project(
 	'c',
 	version: '0.5.0',
 	license: 'MIT',
-	meson_version: '>=0.53.0',
+	meson_version: '>=0.56.0',
 	default_options: [
 		'c_std=c11',
 		'warning_level=3',
@@ -165,18 +165,26 @@ lib = library(
 
 install_headers('include/libseat.h')
 
+libseat_vars = {
+	'have_seatd': with_seatd.to_string(),
+	'have_logind': logind.found().to_string(),
+	'have_builtin': with_builtin.to_string(),
+}
+
 pkgconfig = import('pkgconfig')
 pkgconfig.generate(lib,
 	version: meson.project_version(),
 	filebase: 'libseat',
 	name: 'libseat',
 	description: 'Seat management library',
+	variables: libseat_vars,
 )
 
 libseat = declare_dependency(
 	link_with: lib,
 	dependencies: private_deps,
 	include_directories: include_directories('include', is_system: true),
+	variables: libseat_vars,
 )
 
 if with_server
