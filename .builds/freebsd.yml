@@ -1,6 +1,7 @@
 image: freebsd/latest
 packages:
    - meson
+   - valgrind
 sources:
    - https://git.sr.ht/~kennylevinsen/seatd
 tasks:
@@ -12,7 +13,6 @@ tasks:
       ninja -C build test
    - smoketest: |
       rm -rf build
-      meson -Db_lundef=false -Db_sanitize=address -Dseatd=enabled -Dbuiltin=enabled -Dexamples=enabled -Dlogind=disabled build seatd
       ninja -C build
       timeout -s KILL 30s ./seatd/.builds/smoketest-seatd.sh
    - smoketest-builtin: |
