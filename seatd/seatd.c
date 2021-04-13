@@ -66,6 +66,7 @@ int main(int argc, char *argv[]) {
 	}
 	log_init();
 	libseat_set_log_level(level);
+	libseat_set_log_handler(log_syslog);
 
 	const char *usage = "Usage: seatd [options]\n"
 			    "\n"

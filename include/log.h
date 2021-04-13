@@ -2,6 +2,7 @@
 #define _LOG_H
 
 #include <stdarg.h>
+#include <syslog.h>
 
 #include "libseat.h"
 
@@ -34,5 +35,6 @@
 
 void log_init(void);
 void _logf(enum libseat_log_level level, const char *fmt, ...) ATTRIB_PRINTF(2, 3);
+void log_syslog(enum libseat_log_level level, const char *fmt, va_list ap);
 
 #endif

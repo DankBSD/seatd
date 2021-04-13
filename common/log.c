@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <syslog.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -29,6 +30,13 @@ static const char *verbosity_headers[] = {
 	[LIBSEAT_LOG_LEVEL_ERROR] = "[ERROR]",
 	[LIBSEAT_LOG_LEVEL_INFO] = "[INFO]",
 	[LIBSEAT_LOG_LEVEL_DEBUG] = "[DEBUG]",
+};
+
+static const int verbosity_syslog_level[] = {
+	[LIBSEAT_LOG_LEVEL_SILENT] = LOG_DAEMON | LOG_DEBUG,
+	[LIBSEAT_LOG_LEVEL_ERROR] = LOG_DAEMON | LOG_ERR,
+	[LIBSEAT_LOG_LEVEL_INFO] = LOG_DAEMON | LOG_INFO,
+	[LIBSEAT_LOG_LEVEL_DEBUG] = LOG_DAEMON | LOG_DEBUG,
 };
 
 static void timespec_sub(struct timespec *r, const struct timespec *a, const struct timespec *b) {
@@ -62,6 +70,10 @@ static void log_stderr(enum libseat_log_level level, const char *fmt, va_list ar
 	vfprintf(stderr, fmt, args);
 
 	fprintf(stderr, "%s", postfix);
+}
+
+void log_syslog(enum libseat_log_level level, const char *fmt, va_list args) {
+	syslog(verbosity_syslog_level[level], fmt, args);
 }
 
 void log_init(void) {
