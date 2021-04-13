@@ -19,7 +19,7 @@ cnt=0
 while [ "$cnt" -lt 2 ]
 do
    echo "Simpletest run $((cnt+1))"
-   if ! sudo LIBSEAT_BACKEND=builtin ./build/simpletest $file
+   if ! sudo LIBSEAT_BACKEND=builtin valgrind --leak-check=yes ./build/simpletest $file
    then
       echo "Simpletest failed"
       exit $res
