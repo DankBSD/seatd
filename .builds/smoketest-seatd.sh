@@ -4,7 +4,7 @@
 # Start seatd
 #
 [ -f seatd.sock ] && sudo rm seatd.sock
-sudo SEATD_LOGLEVEL=debug SEATD_SOCK=./seatd.sock ./build/seatd &
+sudo SEATD_LOGLEVEL=debug SEATD_SOCK=./seatd.sock valgrind --leak-check=yes ./build/seatd &
 
 # seatd is started in the background, so wait for it to come alive
 cnt=0
@@ -54,5 +54,5 @@ done
 # Wait for it to shut down
 #
 sudo killall seatd 2>/dev/null
-
+fg
 echo "smoketest-seatd completed"

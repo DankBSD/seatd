@@ -5,6 +5,7 @@ packages:
    - clang
    - clang-analyzer
    - scdoc
+   - valgrind
 sources:
    - https://git.sr.ht/~kennylevinsen/seatd
 tasks:
