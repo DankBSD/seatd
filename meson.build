@@ -157,6 +157,16 @@ if get_option('libseat-logind') != 'disabled'
 	endif
 endif
 
+if get_option('libseat-consolekit2') != 'disabled'
+	basu = dependency('basu', required: true)
+	add_project_arguments('-DCONSOLEKIT2_ENABLED=1', language: 'c')
+	private_files += [
+		'libseat/backend/consolekit2.c',
+		'common/drm.c',
+	]
+	private_deps += basu
+endif
+
 # needed for cross-compilation
 realtime = meson.get_compiler('c').find_library('rt')
 private_deps += realtime
@@ -193,6 +203,7 @@ install_headers('include/libseat.h')
 libseat_vars = {
 	'have_seatd': with_seatd.to_string(),
 	'have_logind': logind.found().to_string(),
+	'have_consolekit2': (get_option('libseat-consolekit2') != 'disabled').to_string(),
 	'have_builtin': with_builtin.to_string(),
 }
 
@@ -286,5 +297,6 @@ summary({
 	'libseat-builtin': with_builtin,
 	'libseat-systemd': logind.found() and logind.name() == 'libsystemd',
 	'libseat-elogind': logind.found() and logind.name() == 'libelogind',
+	'libseat-consolekit2': get_option('libseat-consolekit2') != 'disabled',
 	'server': with_server,
 }, bool_yn: true)
